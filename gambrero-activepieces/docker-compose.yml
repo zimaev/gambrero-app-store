@@ -1,0 +1,43 @@
+id: activepieces
+name: Activepieces
+version: "latest"
+releaseNotes: >
+  Activepieces — это open-source автоматизация, аналог Zapier. Поддерживает подключение к множеству сервисов.
+
+tagline: Open-source альтернатива Zapier
+icon: https://ragdata.github.io/cosmos-servapps/servapps/activepieces/icon.png
+category: automation
+type: app
+port: 80
+url: "http://localhost"
+developer: Activepieces
+description: >
+  Activepieces — это no-code/low-code инструмент автоматизации задач, ориентированный на разработчиков и команды. Используйте его для создания автоматизированных рабочих процессов, которые соединяют API и сервисы без необходимости писать код.
+
+gallery:
+  - https://raw.githubusercontent.com/activepieces/activepieces/main/docs/static/img/screenshots/screenshot-1.png
+  - https://raw.githubusercontent.com/activepieces/activepieces/main/docs/static/img/screenshots/screenshot-2.png
+
+dependencies: [ ]
+
+services:
+  app:
+    image: activepieces/activepieces:latest
+    restart: unless-stopped
+    environment:
+      - AP_QUEUE_MODE=MEMORY
+      - AP_DB_TYPE=SQLITE3
+      - AP_FRONTEND_URL=http://localhost
+    volumes:
+      - activepieces-data:/root/.activepieces
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:80" ]
+      interval: 40s
+      timeout: 30s
+      retries: 3
+      start_period: 60s
+
+volumes:
+  activepieces-data:
